@@ -1,22 +1,69 @@
 // Code for reading and setting any environment variables with the dotenv package
-var dotEnv = require("dotenv").config();
+require("dotenv").config();
 
-// This code is required to import the keys.js file. It is stored in a variable
-var axios = require("axios");
+// Variables for storing
+var keys = require("./keys.js");
+var Spotify = require("node-spotify-api");
+var spotify = new Spotify(keys.spotify);
+var makingARequest = require("making-a-request");
+var moment = require("moment");
+var fs = require("fs");
+
+// Variables for taking in user commands
+var argCommand = process.argv[2];
+var userSearch = process.argv[3];
 
 
 // CONCERT CALL
+function concertInquiry() {
+    var artistName = process.argv[3];
+    
+    makingARequest = "https://rest.bandsintown.com/artists/" + artistName + "/events?app_id=codingbootcamp";
+    
+    axios.get(queryURL).then(
+        function(response){
+            console.log("+========================== Concert Dates ==============================+");
+            console.log("Venue Name: " + response.data.Title);
+            console.log("Venue Location: " + response.data.Year);
+            console.log("Date of Concert: " + response.data.imdbRating);
+            console.log("+======================================================================+");
+        }
+    )
+    }
+
+
+// Switch 
+// function switchCommands(userSearch) {
+//     switch (userSearch){
+//         case: "concert-this":
+//         // argumentname = ;
+//         break;
+
+//         case: "spotify-this-song":
+//         //
+//         break;
+
+//         case: "movie-this":
+//         // argumentname = ;
+//         break;
+
+//         case: "do-what-it-says":
+//         // argumentname = ;
+//         break;
+//     }
+        
+// }
+
 
 
 
 // SPOTIFY CALL
 
-// var keys = require("./keys.js");
+// 
 // //
-// // Varible spotifyThis stores the Spotify action; variable userSerach is the parameter the user puts in
+// // Varible spotifyThis stores the Spotify action; variable userSearch is the parameter the user puts in
 // // i.e. the title of the song
-// // var command1 = process.argv[2];
-// // var command2 = process.argv[3];
+
 
 // // Tests for multiple words in user's search
 // for (var i = 4; i < process.argv.length; i++) {
@@ -48,7 +95,8 @@ var axios = require("axios");
 
 // OMBD CALL
 
-var movieName = process.argv[3];
+function movieInquiry() {
+var movieName = userSearch;
 
 var queryURL = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
@@ -66,5 +114,7 @@ axios.get(queryURL).then(
         console.log("+======================================================================+");
     }
 )
+}
+
 
 // DO WHAT IT SAYS
