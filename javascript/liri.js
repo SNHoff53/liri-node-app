@@ -1,5 +1,5 @@
 // Code for reading and setting any environment variables with the dotenv package
-require("dotenv").config();
+var dotEnv = require("dotenv").config();
 
 // This code is required to import the keys.js file. It is stored in a variable
 var axios = require("axios");
@@ -54,6 +54,7 @@ var queryURL = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey
 
 axios.get(queryURL).then(
     function(response){
+        console.log("+========================== Movie Result ==============================+");
         console.log("Moive Title: " + response.data.Title);
         console.log("Year: " + response.data.Year);
         console.log("IMDB Rating: " + response.data.imdbRating);
@@ -62,7 +63,7 @@ axios.get(queryURL).then(
         console.log("Language of the movie: " + response.data.Language);
         console.log("Movie Plot: " + response.data.Plot);
         console.log("Actors: " + response.data.Actors);
-        console.log("+------------------------------------------------");
+        console.log("+======================================================================+");
     }
 )
 
