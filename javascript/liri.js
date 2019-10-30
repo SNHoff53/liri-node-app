@@ -2,119 +2,81 @@
 require("dotenv").config();
 
 // Variables for storing
+const axios = require("axios");
 var keys = require("./keys.js");
 var Spotify = require("node-spotify-api");
-var spotify = new Spotify(keys.spotify);
-var makingARequest = require("making-a-request");
+// var spotify = new Spotify(keys.spotify);
 var moment = require("moment");
 var fs = require("fs");
 
-// Variables for taking in user commands
+// Variable for taking in each command (concert-this; spotify-this-song; movie-this; do-what-it-says)
 var argCommand = process.argv[2];
-var userSearch = process.argv[3];
 
-
-// CONCERT CALL
-function concertInquiry() {
+// CONCERT-THIS
+// if the user calls "concert-this" at index 3, then run the following API call for bands
+if (argCommand === "concert-this"){
     var artistName = process.argv[3];
     
-    makingARequest = "https://rest.bandsintown.com/artists/" + artistName + "/events?app_id=codingbootcamp";
-    
-    axios.get(queryURL).then(
-        function(response){
+    axios
+    .get("https://rest.bandsintown.com/artists/" + artistName + "/events?app_id=codingbootcamp")
+    .then(function(response){
             console.log("+========================== Concert Dates ==============================+");
-            console.log("Venue Name: " + response.data.Title);
-            console.log("Venue Location: " + response.data.Year);
-            console.log("Date of Concert: " + response.data.imdbRating);
+            console.log("Venue Name: " + response.data.venue);
+            console.log("Venue Location: " + response.data.city);
+            console.log("Date of Concert: " + moment.toJSON(response.data.date).format("MM/DD/YYYY"));
             console.log("+======================================================================+");
         }
     )
-    }
-
-
-// Switch 
-// function switchCommands(userSearch) {
-//     switch (userSearch){
-//         case: "concert-this":
-//         // argumentname = ;
-//         break;
-
-//         case: "spotify-this-song":
-//         //
-//         break;
-
-//         case: "movie-this":
-//         // argumentname = ;
-//         break;
-
-//         case: "do-what-it-says":
-//         // argumentname = ;
-//         break;
-//     }
-        
-// }
-
-
-
-
-// SPOTIFY CALL
-
-// 
-// //
-// // Varible spotifyThis stores the Spotify action; variable userSearch is the parameter the user puts in
-// // i.e. the title of the song
-
-
-// // Tests for multiple words in user's search
-// for (var i = 4; i < process.argv.length; i++) {
-//     command1 += '+' + process.argv[i];
-// }
-
-// Write to random.txt file
-
-// Allows us to access our keys information/gabbing the Spotify keys
-// var spotify = new spotify(keys.spotify);
-
-// // 
-
-// // functions(search) 
-
-// // Creating a object for the user's search
-// function spotifyMusic(artistName, songTitle, previewSong, album) {
-//     this.artistName = artistName;
-//     this.songTitle = songTitle;
-//     this.previewSong = previewSong;
-//     this.album = album;
-//         console.log("Result " + i);
-//         console.log("Arist(s): " + this.artistName);
-//         console.log("Song Name: " + this.songTitle);
-//         console.log("Preview Song: " + this.previewSong);
-//         console.log("Album: " + this.album);
-//         console.log("+------------------------------------------------");
-// }
-
-// OMBD CALL
-
-function movieInquiry() {
-var movieName = userSearch;
-
-var queryURL = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
-
-axios.get(queryURL).then(
-    function(response){
-        console.log("+========================== Movie Result ==============================+");
-        console.log("Moive Title: " + response.data.Title);
-        console.log("Year: " + response.data.Year);
-        console.log("IMDB Rating: " + response.data.imdbRating);
-        console.log("Rotten Tomatoes Rating: " + response.data.rottenTomatoesRating);
-        console.log("Country/Origin: " + response.data.Country);
-        console.log("Language of the movie: " + response.data.Language);
-        console.log("Movie Plot: " + response.data.Plot);
-        console.log("Actors: " + response.data.Actors);
-        console.log("+======================================================================+");
-    }
-)
 }
+// else if (command === "spotify-this-song"){
+// // SPOTIFY-THIS-SONG
+// }
+
+// MOVIE-THIS
+else if(argCommand === "movie-this"){
+    var movieName = process.argv[3];
+
+        axios
+        .get("http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy")
+        .then(function(response){
+                console.log("+========================== Movie Result ==============================+");
+                console.log("Movie Title: " + response.data.Title);
+                console.log("Year: " + response.data.Year);
+                console.log("IMDB Rating: " + response.data.imdbRating);
+                console.log("Rotten Tomatoes Rating: " + response.data.rottenTomatoesRating);
+                console.log("Country/Origin: " + response.data.Country);
+                console.log("Language of the movie: " + response.data.Language);
+                console.log("Movie Plot: " + response.data.Plot);
+                console.log("Actors: " + response.data.Actors);
+                console.log("+======================================================================+");
+        })
+        .catch(function(error) {
+            if (error.response) {
+            
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an object that comes back with details pertaining to the error that occurred.
+            console.log(error.request);
+            } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+            }
+            console.log(error.config);
+        });
+        
+}
+else(comman === "do-what-it-says");
+// DO-WHAT-IT-SAYS
 
 
-// DO WHAT IT SAYS
+
+
+
+
+
+
+
+
