@@ -5,7 +5,7 @@ require("dotenv").config();
 const axios = require('axios');
 var keys = require('./keys.js');
 var Spotify = require('node-spotify-api');
-// var spotify = new Spotify(keys.spotify);
+var spotify = new Spotify(keys.spotify);
 var moment = require('moment');
 var fs = require('fs');
 
@@ -21,16 +21,29 @@ if (argCommand === "concert-this"){
     .get("https://rest.bandsintown.com/artists/" + artistName + "/events?app_id=codingbootcamp")
     .then(function(response){
             console.log("+========================== Concert Dates ==============================+");
-            console.log("Venue Name: " + response.data.venueName);
+            console.log("Venue Name: " + response.data.name);
             console.log("Venue Location: " + response.data.location);
             console.log("Date of Concert: " + moment().format("MM/DD/YYYY"));
             console.log("+======================================================================+");
         }
     )
 }
-// else if (command === "spotify-this-song"){
+else if (argCommand === "spotify-this-song"){
 // // SPOTIFY-THIS-SONG
-// }
+    var songSearch = process.argv[3];
+
+    spotify
+    .search({ 
+        type: 'track', 
+        query: 'All the Small Things' })
+    .then(function(response) {
+      console.log(response);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+    
+}
 
 // MOVIE-THIS
 else if(argCommand === "movie-this"){
@@ -68,7 +81,7 @@ else if(argCommand === "movie-this"){
         });
         
 }
-else(comman === "do-what-it-says");
+    else(argCommand === "do-what-it-says");
 // DO-WHAT-IT-SAYS
 
 
