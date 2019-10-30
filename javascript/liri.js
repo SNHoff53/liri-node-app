@@ -2,12 +2,12 @@
 require("dotenv").config();
 
 // Variables for storing
-const axios = require("axios");
-var keys = require("./keys.js");
-var Spotify = require("node-spotify-api");
+const axios = require('axios');
+var keys = require('./keys.js');
+var Spotify = require('node-spotify-api');
 // var spotify = new Spotify(keys.spotify);
-var moment = require("moment");
-var fs = require("fs");
+var moment = require('moment');
+var fs = require('fs');
 
 // Variable for taking in each command (concert-this; spotify-this-song; movie-this; do-what-it-says)
 var argCommand = process.argv[2];
@@ -21,9 +21,9 @@ if (argCommand === "concert-this"){
     .get("https://rest.bandsintown.com/artists/" + artistName + "/events?app_id=codingbootcamp")
     .then(function(response){
             console.log("+========================== Concert Dates ==============================+");
-            console.log("Venue Name: " + response.data.venue);
-            console.log("Venue Location: " + response.data.city);
-            console.log("Date of Concert: " + moment.toJSON(response.data.date).format("MM/DD/YYYY"));
+            console.log("Venue Name: " + response.data.venueName);
+            console.log("Venue Location: " + response.data.location);
+            console.log("Date of Concert: " + moment().format("MM/DD/YYYY"));
             console.log("+======================================================================+");
         }
     )
