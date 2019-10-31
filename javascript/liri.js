@@ -5,45 +5,94 @@ require("dotenv").config();
 const axios = require('axios');
 var keys = require('./keys.js');
 var Spotify = require('node-spotify-api');
-var spotify = new Spotify(keys.spotify);
+// var spotify = new Spotify(keys.spotify);
 var moment = require('moment');
 var fs = require('fs');
 
 // Variable for taking in each command (concert-this; spotify-this-song; movie-this; do-what-it-says)
 var argCommand = process.argv[2];
 
+// Switch 
+// function (switchCommands) {
+//     switch (userSearch){
+//         case: "concert-this":
+//         // argumentname = ;
+//         break;
+
+//         case: "spotify-this-song":
+//         //
+//         break;
+
+//         case: "movie-this":
+//         // argumentname = ;
+//         break;
+
+//         case: "do-what-it-says":
+//         // argumentname = ;
+//         break;
+//     }
+
+// }
+
 // CONCERT-THIS
 // if the user calls "concert-this" at index 3, then run the following API call for bands
 if (argCommand === "concert-this"){
-    var artistName = process.argv[3];
+    var artist = process.argv[3];
     
     axios
-    .get("https://rest.bandsintown.com/artists/" + artistName + "/events?app_id=codingbootcamp")
+    .get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp")
     .then(function(response){
             console.log("+========================== Concert Dates ==============================+");
             console.log("Venue Name: " + response.data.name);
             console.log("Venue Location: " + response.data.location);
             console.log("Date of Concert: " + moment().format("MM/DD/YYYY"));
             console.log("+======================================================================+");
-        }
-    )
+        })
+        .catch(function(error) {
+            if (error.response) {
+            
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an object that comes back with details pertaining to the error that occurred.
+            console.log(error.request);
+            } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+            }
+            console.log(error.config);
+        });
 }
-else if (argCommand === "spotify-this-song"){
-// // SPOTIFY-THIS-SONG
-    var songSearch = process.argv[3];
+// else if (argCommand === "spotify-this-song"){
+// // // SPOTIFY-THIS-SONG
+//     var spotify = require('./keys.js');
+//     if (process.argv[2]); {
+//         var spotifySearch = process.argv[3];
+//     }
 
-    spotify
-    .search({ 
-        type: 'track', 
-        query: 'All the Small Things' })
-    .then(function(response) {
-      console.log(response);
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
+//     for (var key in spotify)
+
+//     if (key === spotifySearch || spotifySearch === undefined)
+
+//     spotify
+//     .search({ 
+//         type: 'track', 
+//         query: 'All the Small Things' })
+//     .then(function(response) {
+//         console.log("+========================== Music Results ==============================+");
+//         console.log("Artist(s) Name: " + response.data.name);
+//         console.log("Song Name: " + response.data.song);
+//         console.log("Link to Preview Song: " + response.data.preview_url);
+//         console.log("Album: " + response.data.album);
+//         console.log("+======================================================================+");
+//     })
+//     .catch(function(err) {
+//       console.log(err);
+//     });
     
-}
+// }
 
 // MOVIE-THIS
 else if(argCommand === "movie-this"){
@@ -56,7 +105,7 @@ else if(argCommand === "movie-this"){
                 console.log("Movie Title: " + response.data.Title);
                 console.log("Year: " + response.data.Year);
                 console.log("IMDB Rating: " + response.data.imdbRating);
-                console.log("Rotten Tomatoes Rating: " + response.data.rottenTomatoesRating);
+                console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
                 console.log("Country/Origin: " + response.data.Country);
                 console.log("Language of the movie: " + response.data.Language);
                 console.log("Movie Plot: " + response.data.Plot);
@@ -81,9 +130,21 @@ else if(argCommand === "movie-this"){
         });
         
 }
-    else(argCommand === "do-what-it-says");
+else(argCommand === "do-what-it-says");
 // DO-WHAT-IT-SAYS
+fs.readFile("../random.txt", "utf8", function(error, data){
+    if(error){
+        return console.log(error);
+    }
+    // We want to print the contents within the random.txt, or "data"
+    console.log(data);
 
+    // Splitting the data/contents by commas. This makes it easier to read.
+    var dataArr = data.split(",");
+
+    // Re-display the content as an array for use later
+    console.log(dataArr)
+})
 
 
 
