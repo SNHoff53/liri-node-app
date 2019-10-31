@@ -10,33 +10,37 @@ var moment = require('moment');
 var fs = require('fs');
 
 // Variable for taking in each command (concert-this; spotify-this-song; movie-this; do-what-it-says)
-var argCommand = process.argv[3];
+var argCommand = process.argv[2];
+var searchTerm = process.argv.slice(3).join(" ");
+
 
 function switchCommands(){
     switch (argCommand){
         case "concert-this":
-        concertThis;
+        concertThis();
         break;
 
         case "spotify-this-song":
-        spotifyThis;
+        spotifyThis();
         break;
 
         case "movie-this":
-        movieThis;
+        movieThis();
         break;
 
         case "do-what-it-says":
-        doWhatItSays;
+        doWhatItSays();
         break;
     }
 }
+switchCommands();
 
 // CONCERT-THIS
 function concertThis(){
     axios
-    .get("https://rest.bandsintown.com/artists/" + argCommand + "/events?app_id=codingbootcamp")
+    .get("https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp")
     .then(function(response){
+    console.log(response);
         console.log("+========================== Concert Dates ==============================+");
         console.log("Venue Name: " + response.data.name);
         console.log("Venue Location: " + response.data.location);
@@ -60,26 +64,23 @@ function concertThis(){
     });
 }
 function spotifyThis(){
-// // SPOTIFY-THIS-SONG
+// SPOTIFY-THIS-SONG
+    if (searchTerm === undefined){
+        searchTerm = "Sorry Not Sorry"
+    }   
     
-    // var spotify = new Spotify({
-    //     id: keys.spotify.id,
-    //     search: keys.spotify.secret
-    // });
-
-    spotify
-    .search({ 
-        type: 'track', 
-        query: 'All the Small Things' 
+    spotify.search({ 
+        type: "track", 
+        query: searchTerm
     })
-    .then(function(response){
-        console.log(response);
+    .then(function(data){
+    // console.log(data.tracks.items[0]);
         console.log("+========================== Music Results ==============================+");
-        console.log("Artist(s) Name: " + response.data.name);
-        console.log("Song Name: " + response.data.song);
-        console.log("Link to Preview Song: " + response.data.preview_url);
-        console.log("Album: " + response.data.album);
-        console.log("+======================================================================+");;
+        console.log("Artist(s) Name: " + data.tracks.items[0].artists.name);
+        console.log("Song Name: " + data.tracks.items[0].name);
+        console.log("Link to Preview Song: " + data.tracks.items[0].preview_url);
+        console.log("Album: " + data.tracks.items[0].album.name);
+        console.log("+======================================================================+");
     })
     .catch(function(err) {
         console.log(err);
@@ -89,7 +90,7 @@ function spotifyThis(){
 // MOVIE-THIS
 function movieThis(){
         axios
-        .get("http://www.omdbapi.com/?t=" + argCommand + "&y=&plot=short&apikey=trilogy")
+        .get("http://www.omdbapi.com/?t=" + searchTerm + "&y=&plot=short&apikey=trilogy")
         .then(function(response){
                 console.log("+========================== Movie Result ==============================+");
                 console.log("Movie Title: " + response.data.Title);
