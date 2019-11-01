@@ -2,7 +2,7 @@
 require('dotenv').config();
 
 // Variables for storing
-const axios = require('axios');
+var axios = require('axios');
 var keys = require('./keys.js');
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
@@ -11,7 +11,7 @@ var fs = require('fs');
 
 // Variable for taking in each command (concert-this; spotify-this-song; movie-this; do-what-it-says)
 var argCommand = process.argv[2];
-var searchTerm = process.argv.slice(3).join(" ");
+var userParameters = process.argv.slice(3).join(" ");
 
 
 function switchCommands(){
@@ -36,47 +36,36 @@ function switchCommands(){
 switchCommands();
 
 // CONCERT-THIS
+
 function concertThis(){
+    if (userParameters === undefined){
+        userParameters = "Go Your Own Way"
+    }  
     axios
-    .get("https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp")
+    .get("https://rest.bandsintown.com/artists/" + userParameters + "/events?app_id=codingbootcamp")
     .then(function(response){
-    console.log(response);
-        console.log("+========================== Concert Dates ==============================+");
-        console.log("Venue Name: " + response.data.name);
-        console.log("Venue Location: " + response.data.location);
-        console.log("Date of Concert: " + moment().format("MM/DD/YYYY"));
-        console.log("+======================================================================+");
-    })
-    .catch(function(error) {
-        if (error.response) {
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-        } else if (error.request) {
-        // if the request was made but no response was received
-        // `error.request` is an object that comes back with details pertaining to the error that occurred.
-        console.log(error.request);
-        } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log("Error", error.message);
+        for(var i = 0; i < response.data.length; i++){
+            console.log("+========================== Concert Dates ==============================+");
+            console.log("Venue Name: " + response.data[i].venue.name);
+            console.log("Venue Location: " + response.data[i].venue.city + ", " + response.data[i].venue.country);
+            console.log("Date of Concert(s): " + moment(response.data[i].datetime).format("L"));
+            console.log("+======================================================================+");
         }
-        console.log(error.config);
-    });
+    })
 }
 function spotifyThis(){
 // SPOTIFY-THIS-SONG
-    if (searchTerm === undefined){
-        searchTerm = "Sorry Not Sorry"
+    if (userParameters === undefined){
+        userParameters = "Dreams"
     }   
-    
     spotify.search({ 
         type: "track", 
-        query: searchTerm
+        query: userParameters
     })
     .then(function(data){
-    // console.log(data.tracks.items[0]);
+    // console.log(data.tracks.items);
         console.log("+========================== Music Results ==============================+");
-        console.log("Artist(s) Name: " + data.tracks.items[0].artists.name);
+        console.log("Artist: " + data.tracks.items[0].artists.name);
         console.log("Song Name: " + data.tracks.items[0].name);
         console.log("Link to Preview Song: " + data.tracks.items[0].preview_url);
         console.log("Album: " + data.tracks.items[0].album.name);
@@ -90,7 +79,7 @@ function spotifyThis(){
 // MOVIE-THIS
 function movieThis(){
         axios
-        .get("http://www.omdbapi.com/?t=" + searchTerm + "&y=&plot=short&apikey=trilogy")
+        .get("http://www.omdbapi.com/?t=" + userParameters + "&y=&plot=short&apikey=trilogy")
         .then(function(response){
                 console.log("+========================== Movie Result ==============================+");
                 console.log("Movie Title: " + response.data.Title);
@@ -103,22 +92,6 @@ function movieThis(){
                 console.log("Actors: " + response.data.Actors);
                 console.log("+======================================================================+");
         })
-        .catch(function(error) {
-            if (error.response) {
-            
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-            } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an object that comes back with details pertaining to the error that occurred.
-            console.log(error.request);
-            } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log("Error", error.message);
-            }
-            console.log(error.config);
-        });
 }
 function doWhatItSays(){
 // DO-WHAT-IT-SAYS
