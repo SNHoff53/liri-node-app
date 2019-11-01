@@ -47,12 +47,18 @@ function concertThis(){
     .then(function(response){
         for(var i = 0; i < response.data.length; i++){
             console.log("+========================== Concert Dates ==============================+");
+            console.log("Result: " + [i]);
             console.log("Venue Name: " + response.data[i].venue.name);
             console.log("Venue Location: " + response.data[i].venue.city + ", " + response.data[i].venue.country);
             console.log("Date of Concert(s): " + moment(response.data[i].datetime).format("L"));
             console.log("+======================================================================+");
         }
     })
+    .catch(function (error) {
+        if (error) {
+            console.log("Sorry. There are no concert dates available. Please try another artist.");
+        }
+    });
 };
 
 // SPOTIFY-THIS-SONG
@@ -62,12 +68,13 @@ function spotifyThis(){
     }   
     spotify.search({ 
         type: "track", 
-        query: userParameters
+        query: userParameters,
+        limit: 10
     })
     .then(function(data){
     // console.log(data.tracks.items);
         console.log("+========================== Music Results ==============================+");
-        console.log("Artist: " + data.tracks.items[0].artists.name);
+        console.log("Artist: " + data.tracks.items[0].artists[0].name);
         console.log("Song Name: " + data.tracks.items[0].name);
         console.log("Link to Preview Song: " + data.tracks.items[0].preview_url);
         console.log("Album: " + data.tracks.items[0].album.name);
@@ -80,26 +87,41 @@ function spotifyThis(){
 
 // MOVIE-THIS
 function movieThis(){
-        axios
-        .get("http://www.omdbapi.com/?t=" + userParameters + "&y=&plot=short&apikey=trilogy")
-        .then(function(response){
-                console.log("+========================== Movie Result ==============================+");
-                console.log("Movie Title: " + response.data.Title);
-                console.log("Year: " + response.data.Year);
-                console.log("IMDB Rating: " + response.data.imdbRating);
-                console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
-                console.log("Country/Origin: " + response.data.Country);
-                console.log("Language of the movie: " + response.data.Language);
-                console.log("Movie Plot: " + response.data.Plot);
-                console.log("Actors: " + response.data.Actors);
-                console.log("+======================================================================+");
-        })
+    axios
+    .get("http://www.omdbapi.com/?t=" + userParameters + "&y=&plot=short&apikey=trilogy")
+    .then(function(response){
+        console.log("+========================== Movie Result ==============================+");
+        console.log("Movie Title: " + response.data.Title);
+        console.log("Year: " + response.data.Year);
+        console.log("IMDB Rating: " + response.data.imdbRating);
+        console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+        console.log("Country/Origin: " + response.data.Country);
+        console.log("Language of the movie: " + response.data.Language);
+        console.log("Movie Plot: " + response.data.Plot);
+        console.log("Actors: " + response.data.Actors);
+        console.log("+======================================================================+");
+    })
+    .catch(function(error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code that was out of range of 200
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request - Error triggered
+          console.log("Error", error.message);
+        }
+        console.log(error.config);
+      });
 };
 
 // DO-WHAT-IT-SAYS
 function doWhatItSays(){
 fs.readFile("random.txt", "utf8", function(error, data){
-    if(error){
+    if (error){
         return console.log(error);
     }
     // We want to print the contents within the random.txt, or "data"
