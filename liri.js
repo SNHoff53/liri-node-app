@@ -13,7 +13,6 @@ var fs = require('fs');
 var argCommand = process.argv[2];
 var userParameters = process.argv.slice(3).join(" ");
 
-
 function switchCommands(){
     switch (argCommand){
         case "concert-this":
@@ -31,12 +30,14 @@ function switchCommands(){
         case "do-what-it-says":
         doWhatItSays();
         break;
+
+        default:
+            console.log("Sorry, you entered an incorrect search command. Please enter {concert-this}, {spotify-this-song}, {movie-this}, or {do-what-it-says}, and then a parameter that fits the search command.")
     }
 }
 switchCommands();
 
 // CONCERT-THIS
-
 function concertThis(){
     if (userParameters === undefined){
         userParameters = "Go Your Own Way"
@@ -52,9 +53,10 @@ function concertThis(){
             console.log("+======================================================================+");
         }
     })
-}
-function spotifyThis(){
+};
+
 // SPOTIFY-THIS-SONG
+function spotifyThis(){
     if (userParameters === undefined){
         userParameters = "Dreams"
     }   
@@ -74,7 +76,7 @@ function spotifyThis(){
     .catch(function(err) {
         console.log(err);
     });
-}
+};
 
 // MOVIE-THIS
 function movieThis(){
@@ -92,9 +94,10 @@ function movieThis(){
                 console.log("Actors: " + response.data.Actors);
                 console.log("+======================================================================+");
         })
-}
-function doWhatItSays(){
+};
+
 // DO-WHAT-IT-SAYS
+function doWhatItSays(){
 fs.readFile("random.txt", "utf8", function(error, data){
     if(error){
         return console.log(error);
@@ -108,4 +111,4 @@ fs.readFile("random.txt", "utf8", function(error, data){
     // Re-display the content as an array for use later
     console.log(dataArr)
     })
-}
+};
