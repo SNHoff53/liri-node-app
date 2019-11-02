@@ -13,6 +13,7 @@ var fs = require('fs');
 var argCommand = process.argv[2];
 var userParameters = process.argv.slice(3).join(" ");
 
+
 function switchCommands(){
     switch (argCommand){
         case "concert-this":
@@ -68,8 +69,7 @@ function spotifyThis(){
     }   
     spotify.search({ 
         type: "track", 
-        query: userParameters,
-        limit: 10
+        query: userParameters
     })
     .then(function(data){
     // console.log(data.tracks.items);
@@ -87,6 +87,11 @@ function spotifyThis(){
 
 // MOVIE-THIS
 function movieThis(){
+    if (!userParameters){
+        userParameters = "Mr. Nobody";
+        console.log("If you haven't watched 'Mr. Nobody,' then you should: http://www.imdb.com/title/tt0485947/");
+        console.log("It's on Netflix!")
+    } 
     axios
     .get("http://www.omdbapi.com/?t=" + userParameters + "&y=&plot=short&apikey=trilogy")
     .then(function(response){
@@ -119,18 +124,14 @@ function movieThis(){
 };
 
 // DO-WHAT-IT-SAYS
-function doWhatItSays(){
-fs.readFile("random.txt", "utf8", function(error, data){
-    if (error){
-        return console.log(error);
-    }
-    // We want to print the contents within the random.txt, or "data"
-    console.log(data);
-
-    // Splitting the data/contents by commas. This makes it easier to read.
-    var dataArr = data.split(",");
-
-    // Re-display the content as an array for use later
-    console.log(dataArr)
+function doWhatItSays (){
+    fs.readFile("random.txt", "utf8", function(error, data){
+        if (error){
+            console.log(error);
+        }
+        var dataArr = data.split(",");
+        userParameters = dataArr[1];
+        spotifyThis(userParameters);
     })
 };
+
