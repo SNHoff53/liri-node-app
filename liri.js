@@ -127,7 +127,7 @@ function movieThis(){
 function doWhatItSays (){
     fs.readFile("random.txt", "utf8", function(error, data){
         if (error){
-            console.log(error);
+            return console.log(error);
         }
         var dataArr = data.split(",");
         userParameters = dataArr[1];
