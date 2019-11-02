@@ -129,8 +129,11 @@ function doWhatItSays (){
         if (error){
             return console.log(error);
         }
+        // Declaring a variable and assigning it hold the data.split 
         var dataArr = data.split(",");
+        // Then we must call our useParameters variable to then hold the data stored in the dataArr variable 
         userParameters = dataArr[1];
+        // Then we calling our spotifyThis command with our newly stored data in the userParameters
         spotifyThis(userParameters);
     })
 };
