@@ -53,4 +53,4 @@ The app uses `.gitignore` to store APIs locally -- they are kept safe through ab
 
  ### Preview below:
 
-![do-what-it-says](LIRI-node-app-concert-this.gif)
+![do-what-it-says](LIRI-node-app-do-what-it-says.gif)
