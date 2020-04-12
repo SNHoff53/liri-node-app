@@ -3,11 +3,6 @@
 ## Overview --
 This is a "LIRI" application. LIRI is like iPhone's SIRI. However, while SIRI is a Speech Interpretation and Recognition Interface, LIRI is a Language Interpretation and Recognition Interface. LIRI will be a command line node app that takes in parameters and gives users back data.
 
-The app uses `.gitignore` to store APIs locally -- they are kept safe through abstraction by `.env`/`dotenv` node package. The user will enter in all text and data using the terminal. If user incorrectly entered in search command, an error message will appear asking them to re-enter a correct command.
-
-![incorrect search command message](LIRI-node-app-incorrect-search-command.gif)
-
-
 ## Technologies Used -- 
 * [Node.js]
 * [Node-File-System]
@@ -18,6 +13,11 @@ The app uses `.gitignore` to store APIs locally -- they are kept safe through ab
 * [Node-spotify-api]
 * [OMDB-api]
 * [Bandsintown-api]
+
+The app uses `.gitignore` to store APIs locally -- they are kept safe through abstraction by `.env`/`dotenv` node package. The user will enter in all text and data using the terminal. If user incorrectly entered in search command, an error message will appear asking them to re-enter a correct command.
+
+![incorrect search command message](LIRI-node-app-incorrect-search-command.gif)
+
 
 ## Instructions/Commands --
 
